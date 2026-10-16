@@ -1,3 +1,107 @@
+ঠিক ধরেছো ভাই! লগইনে আটকালে মানুষ দান করবে না! এখন একদম *সহজ দান সিস্টেম* বানিয়ে দিচ্ছি - লগইন ছাড়াই সরাসরি দান!
+
+এই নতুন কোডটা পেস্ট করো ভাই - `index.html` -> পেন্সিল -> সব মুছে পেস্ট -> *Commit changes*
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DonateHeart - হালাল দান</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a1e12;color:#fff;font-family:system-ui}
+.wrap{max-width:480px;margin:0 auto;padding:14px}
+.header{display:flex;justify-content:space-between;align-items:center;padding:10px 0}
+.logo{font-weight:900;font-size:19px}.logo span{color:#facc15}
+.badge{background:#143d22;color:#86efac;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;border:none}
+.card{background:linear-gradient(135deg,#11291c,#1a3c27);border:1px solid #facc1566;border-radius:20px;padding:18px;margin-top:14px}
+.btn{width:100%;background:#facc15;color:#0a1e12;border:none;padding:14px;border-radius:30px;font-weight:900;font-size:15px;margin-top:10px;cursor:pointer}
+.btn2{background:transparent;border:1px solid #234d32;color:#fff}
+.progress{height:12px;background:#06140c;border-radius:10px;margin:10px 0;overflow:hidden}
+.fill{height:100%;width:50%;background:linear-gradient(90deg,#22c55e,#facc15)}
+.modal{display:none;position:fixed;inset:0;background:#000c;z-index:999;justify-content:center;align-items:center;padding:16px}
+.modal.show{display:flex}
+.box{background:#11291c;border:2px solid #facc15;border-radius:20px;padding:20px;width:100%;max-width:380px}
+.box input, .box select{width:100%;padding:12px;border-radius:10px;border:1px solid #234d32;background:#0a1e12;color:#fff;margin-bottom:10px}
+.tag{display:inline-block;background:#143d22;color:#86efac;padding:3px 10px;border-radius:12px;font-size:11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="header">
+<div class="logo">🤲 Donate<span>Heart</span></div>
+<div class="badge">● HALAL VERIFIED</div>
+</div>
+
+<div class="card">
+<div class="tag">যাকাত ক্যালকুলেটর</div>
+<h2 style="margin-top:8px">আসসালামু আলাইকুম</h2>
+<p style="color:#9ca3af;font-size:13px;margin-top:6px">আপনার দান আজ কারো জন্য রহমত</p>
+<p style="font-size:13px;margin-top:8px">প্রয়োজন: <b>৳12,500</b> / লক্ষ্য: <b>৳25,000</b></p>
+<div class="progress"><div class="fill"></div></div>
+<button class="btn" onclick="openDonate('যাকাত - ৳12,500')">💰 যাকাত দিন</button>
+</div>
+
+<div class="card">
+<h3>🍲 খাবার দান</h3>
+<p style="color:#9ca3af;font-size:13px">ক্ষুধার্তদের জন্য - 1 প্যাকেট = 500 টাকা</p>
+<button class="btn" onclick="openDonate('খাবার দান - 500 টাকা')">দান করুন - 500৳</button>
+<button class="btn btn2" onclick="openDonate('খাবার দান - 1000 টাকা')">2 প্যাকেট - 1000৳</button>
+</div>
+
+<div class="card">
+<h3>🧥 শীতবস্ত্র দান</h3>
+<p style="color:#9ca3af;font-size:13px">শীতার্তদের জন্য - 1 কম্বল = 800 টাকা</p>
+<button class="btn" onclick="openDonate('শীতবস্ত্র - 800 টাকা')">দান করুন - 800৳</button>
+</div>
+
+<div class="card">
+<h3>🩸 রক্তদান - পাটগ্রাম</h3>
+<p style="color:#9ca3af;font-size:13px">রক্ত দিন, জীবন বাঁচান - 24/7 ফ্রি</p>
+<button class="btn" onclick="location.href='https://wa.me/8801700000000?text=আমি রক্ত দিতে চাই'">❤️ রক্তদাতা হতে চাই</button>
+<button class="btn btn2" onclick="location.href='https://wa.me/8801700000000?text=আমার রক্ত প্রয়োজন'">🩸 রক্ত প্রয়োজন</button>
+</div>
+
+<div class="card">
+<h3>📱 কিভাবে দান করবেন?</h3>
+<p style="font-size:13px;line-height:20px;margin-top:8px">১. দান করুন বাটনে চাপ দিন<br>২. বিকাশ / নগদ নাম্বার কপি করুন<br>৩. টাকা পাঠিয়ে WhatsApp এ জানান<br>৪. সাথে সাথে রশিদ পাবেন</p>
+</div>
+
+<p style="text-align:center;color:#666;font-size:11px;margin-top:18px">© DonateHeart Patgram | বিকাশ পার্সোনাল: 017XXXXXXXX<br>100% হালাল ও বিশ্বস্ত</p>
+</div>
+
+<!-- দান করার পপআপ -->
+<div id="donateModal" class="modal">
+<div class="box">
+<h3 id="dTitle">দান করুন</h3>
+<p style="font-size:13px;color:#9ca3af;margin:8px 0">নিচের নাম্বারে টাকা পাঠান:</p>
+<div style="background:#0a1e12;padding:12px;border-radius:12px;border:1px dashed #facc15;margin:10px 0">
+<p style="font-size:14px">🔹 <b>বিকাশ পার্সোনাল:</b> <span style="color:#facc15">01628056275</span> <button onclick="copyNum()" style="background:#facc15;border:none;padding:2px 8px;border-radius:8px;font-size:11px">কপি</button></p>
+<p style="font-size:14px;margin-top:6px">🔹 <b>নগদ:</b> <span style="color:#facc15">01628056275X</span></p>
+</div>
+<input id="amount" placeholder="কত টাকা পাঠিয়েছেন? যেমন: 500">
+<input id="trxid" placeholder="TrxID (বিকাশের মেসেজে আছে)">
+<button class="btn" onclick="confirmDonate()">✅ WhatsApp এ জানান</button>
+<button class="btn btn2" onclick="closeDonate()">পরে দেবো</button>
+</div>
+</div>
+
+<script>
+let current='';
+function openDonate(t){current=t; document.getElementById('dTitle').innerText=t; document.getElementById('donateModal').classList.add('show')}
+function closeDonate(){document.getElementById('donateModal').classList.remove('show')}
+function copyNum(){navigator.clipboard.writeText('017XXXXXXXX'); alert('নাম্বার কপি হয়েছে!')}
+function confirmDonate(){
+ let amt=document.getElementById('amount').value||'500';
+ let trx=document.getElementById('trxid').value||'';
+ let msg=`আসসালামু আলাইকুম! আমি ${current} দান করেছি। টাকা: ${amt}৳, TrxID: ${trx} - DonateHeart থেকে`;
+ window.open('https://wa.me/8801628056275?text='+encodeURIComponent(msg),'_blank');
+ closeDonate();
+ alert('আলহামদুলিল্লাহ! WhatsApp এ আপনার তথ্য পাঠানো হয়েছে!');
+}
+</script>
+</body>
+</html>
 https://wa.me/8801628056275<!DOCTYPE html>
 <html lang="bn">
 <head>
